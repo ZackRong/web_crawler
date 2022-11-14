@@ -56,7 +56,7 @@ const getDisaggregatedReports = () => {
                 const text = $(link).text();
                 // console.log(`${year}_${text}: https://www.cftc.gov/${href}`);
                 if (href) {
-                  writeToDisk(`https://www.cftc.gov/${href}`);
+                  writeToDisk(`https://www.cftc.gov${href}`);
                 }
               });
             });
