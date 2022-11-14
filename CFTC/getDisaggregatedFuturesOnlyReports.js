@@ -1,7 +1,30 @@
 const request = require('request');
 const cheerio = require('cheerio');
+const fs = require('fs');
+const path = require('path');
+const { clearDir } = require('../utils/clearDir');
 
 const URL = 'https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalCompressed/index.htm';
+
+// 文件写入硬盘
+const writeToDisk = async (url) => {
+  if (!url) return;
+
+  const basePath = path.join(__dirname, './dist');
+  await clearDir(basePath);
+  // 获取文件名
+  const snippers = url.split('/');
+  const name = snippers[snippers.length - 1];
+  if (name) {
+    try {
+      // const file = path.join(basePath, name);
+      const file = `${basePath}/${name}`;
+      request(url).pipe(fs.createWriteStream(file))
+    } catch (err) {
+      console.log(`文件${url}写入失败，err：`, err);
+    }
+  }
+};
 
 const getDisaggregatedReports = () => {
   const options = {
@@ -31,7 +54,10 @@ const getDisaggregatedReports = () => {
               allLinks.each((_a, link) => {
                 const href = $(link).attr('href');
                 const text = $(link).text();
-                console.log(`${year}-${text}: https://www.cftc.gov/${href}`);
+                // console.log(`${year}_${text}: https://www.cftc.gov/${href}`);
+                if (href) {
+                  writeToDisk(`https://www.cftc.gov/${href}`);
+                }
               });
             });
           }
