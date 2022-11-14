@@ -19,6 +19,7 @@ const writeToDisk = async (url) => {
     try {
       // const file = path.join(basePath, name);
       const file = `${basePath}/${name}`;
+      // 301问题
       request(url).pipe(fs.createWriteStream(file))
     } catch (err) {
       console.log(`文件${url}写入失败，err：`, err);
