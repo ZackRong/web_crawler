@@ -1,5 +1,5 @@
 const request = require('request');
-const axios = require('axios').default;
+const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
@@ -17,14 +17,21 @@ const writeToDisk = async (url) => {
   const snippers = url.split('/');
   const name = snippers[snippers.length - 1];
   if (name) {
-    try {
-      // const file = path.join(basePath, name);
-      const file = `${basePath}/${name}`;
-      // 301问题 https://segmentfault.com/q/1010000018760426
-      request(url).pipe(fs.createWriteStream(file))
-    } catch (err) {
-      console.log(`文件${url}写入失败，err：`, err);
-    }
+    const file = path.join(basePath, name);
+    axios.get(url, {
+      responseType: 'stream'
+    }).then((response) => {
+      response.data.pipe(fs.createWriteStream(file));
+    }).catch((error) => {
+      console.log('error: ', error);
+    });
+    // try {
+    //   const file = path.join(basePath, name);
+    //   // 301问题 https://segmentfault.com/q/1010000018760426
+    //   request(url).pipe(fs.createWriteStream(file))
+    // } catch (err) {
+    //   console.log(`文件${url}写入失败，err：`, err);
+    // }
   }
 };
 
@@ -68,8 +75,7 @@ const getDisaggregatedReports = () => {
   //   }
   // });
 
-  axios.get({
-    url: URL,
+  axios.get(URL, {
     headers: {
       'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
       'referer': 'https://www.cftc.gov/'
