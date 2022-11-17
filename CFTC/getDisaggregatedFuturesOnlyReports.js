@@ -3,7 +3,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
-const { clearDir } = require('../utils/clearDir');
+const { clearDir } = require('../utils/fs-operate');
 
 const URL = 'https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalCompressed/index.htm';
 

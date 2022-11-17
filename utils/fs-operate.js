@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { promises } = require('fs');
 
 // 递归清空文件夹
 exports.clearDir = (path) => {
@@ -17,3 +18,16 @@ exports.clearDir = (path) => {
     resolve();
   });
 };
+
+// 文件是否存在
+exports.fileExists = async (path, deleteWhenExist = false) => {
+  await promises.access(path).then(async () => {
+    if (deleteWhenExist) {
+      await promises.unlinkSync(path);
+    }
+    return true
+  }).catch(() => {
+    return false;
+  });
+};
+
