@@ -12,7 +12,7 @@ exports.clearDir = (path) => {
         clearDir(filePath);
       } else {
         fs.unlinkSync(filePath);
-        console.log(`删除文件${filePath}成功`);
+        console.log(`删除文件【${filePath}】成功`);
       }
     });
     resolve();
