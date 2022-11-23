@@ -9,3 +9,11 @@ headers: {
   'referer': 'https://www.cftc.gov/'
 }
 ```
+## 2022-11-23
+### 解决存在页面script下window中的变量数据
+```
+[1] 获取页面script标签
+[2] 过滤目标script
+[3] 字符串替换，将window替换为global
+[4] eval()执行字符串函数，将数据挂载到global下
+```
